@@ -49,28 +49,29 @@ int main()
   //smallest radius, the last - the greatest.
   std::sort(random_circles.begin(), random_circles.end(), [](const std::shared_ptr<curve>& circle_a, const std::shared_ptr<curve>& circle_b)
   {
-    return circle_a->radius < circle_b->radius;
+    return circle_a->get_radius() < circle_b->get_radius();
   });
 
   std::cout << "\ncircles sorted by their radii:\n";
   for(const auto& curve_ : random_circles)
   {
-    std::cout << curve_->radius << std::endl;
+    std::cout << curve_->get_radius() << std::endl;
   }
 
   //Compute the total sum of radii of all curves in the second container.
 
   double sum_of_radii = 0;
-  #pragma omp parallel shared(sum_of_radii, random_circles)
+#pragma omp parallel shared(sum_of_radii, random_circles)
   {
-    #pragma omp for
+#pragma omp for
     for (const auto &curve_ : random_circles)
     {
-      sum_of_radii += curve_->radius;
+      sum_of_radii += curve_->get_radius();
     }
   }
   std::cout << "\nsum of radii:\n";
   std::cout << sum_of_radii << std::endl;
+
 
   return 0;
 }
